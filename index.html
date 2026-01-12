@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hard State | 𝐇𝐚𝐫𝐝 𝐒𝐭𝐚𝐭𝐞 𝐫𝐨𝐥𝐞 𝐩𝐥𝐚𝐲</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Top Navigation -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="server-status">
+                <span class="status-dot"></span> <span id="playerCount">5023</span> لاعب متصل
+            </div>
+            <div class="user-actions">
+                <div class="cart-btn" onclick="openCart()">
+                    <i class="fa-solid fa-cart-shopping"></i> <span id="cartCount">0</span>
+                </div>
+                <div class="currency-selector">
+                    <span style="font-weight: bold; color: #3b82f6;">DZD</span>
+                </div>
+                <div class="admin-btn" onclick="window.location.href='admin.html'" title="لوحة التحكم">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="container header-container">
+            <div class="logo-area">
+                <h1>𝐇𝐚𝐫𝐝 𝐒𝐭𝐚𝐭𝐞 <span>𝐫𝐨𝐥𝐞 𝐩𝐥𝐚𝐲</span></h1>
+                <p>المتجر الرسمي - الفخامة و الأداء</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="container main-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-box category-menu">
+                <h3><i class="fa-solid fa-list"></i> الأقسام</h3>
+                <ul>
+                    <li class="active" onclick="filterCategory('all')">الكل</li>
+                    <li onclick="filterCategory('cars')">السيارات الحصرية</li>
+                    <li onclick="filterCategory('real-estate')">المنازل و العقارات</li>
+                    <li onclick="filterCategory('services')">خدمات الشخصية</li>
+                </ul>
+            </div>
+
+            <!-- Recent Payments Widget -->
+            <div class="sidebar-box recent-payments">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> آخر المعاملات</h3>
+                <div class="payment-item">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Karim" alt="User">
+                    <div class="payment-info">
+                        <span class="p-name">Karim_DZ</span>
+                        <span class="p-item">فيلا فاخرة</span>
+                    </div>
+                </div>
+                <div class="payment-item">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ali" alt="User">
+                    <div class="payment-info">
+                        <span class="p-name">Ali_Gamer</span>
+                        <span class="p-item">Nissan GTR</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Box -->
+            <div class="sidebar-box support-box">
+                <h3><i class="fa-solid fa-headset"></i> الدعم الفني</h3>
+                <p>تواصل معنا لفتح تذكرة شراء.</p>
+                <a href="https://discord.gg/yF9DkY7NuW" target="_blank" class="btn btn-discord-full"><i
+                        class="fa-brands fa-discord"></i> ديسكورد</a>
+            </div>
+        </aside>
+
+        <!-- Product Grid -->
+        <main class="content-area">
+
+            <div class="products-grid" id="productsGrid">
+
+                <!-- Products will be loaded dynamically by JS -->
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>سلة المشتريات</h3>
+            <span class="close-cart" onclick="closeCart()">&times;</span>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Items injected here -->
+            <p class="empty-cart-msg">السلة فارغة</p>
+        </div>
+        <div class="cart-footer">
+            <div class="total-row">
+                <span>المجموع:</span>
+                <span id="cartTotal">0 DA</span>
+            </div>
+            <button class="btn-checkout" onclick="checkout()">إتمام الشراء</button>
+        </div>
+    </div>
+    <div class="cart-overlay" onclick="closeCart()"></div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 class="modal-title">الدفع الآمن</h2>
+
+            <div class="order-summary">
+                <p>إجمالي الفاتورة: <span id="modalTotal" class="highlight-text">-- DA</span></p>
+                <div class="cart-preview-text" id="cartPreviewText"></div>
+            </div>
+
+            <div class="payment-methods">
+                <div class="method-card" onclick="selectPayment('baridimob')">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <span>BaridiMob</span>
+                </div>
+                <div class="method-card disabled" style="opacity: 0.6; cursor: not-allowed;">
+                    <span class="coming-soon-badge">قريباً</span>
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <span>Visa / MasterCard</span>
+                </div>
+            </div>
+
+            <!-- BaridiMob Details -->
+            <div id="baridimobDetails" class="payment-details" style="display: none;">
+                <div class="info-box" style="text-align: right; background: rgba(15, 23, 42, 0.8);">
+                    <h4
+                        style="color: #fbbf24; margin-bottom: 15px; border-bottom: 1px solid rgba(251, 191, 36, 0.2); padding-bottom: 10px;">
+                        <i class="fa-solid fa-circle-info"></i> معلومات التحويل
+                    </h4>
+
+                    <div class="data-group" style="margin-bottom: 15px;">
+                        <span class="label" style="color: #94a3b8; font-size: 13px;">رقم الحساب (RIP):</span>
+                        <div class="copy-row"
+                            style="margin-top: 5px; background: rgba(0,0,0,0.4); border: 1px solid rgba(251, 191, 36, 0.3);">
+                            <span style="letter-spacing: 2px; font-weight: bold; color: white;">00799999000047187020
+                                <button class="btn-copy" onclick="copyToClipboard('00799999000047187020'
+                                <i class=" fa-solid fa-copy" style="color: #fbbf24;"></i>
+                                </button>
+                        </div>
+                    </div>
+
+                    <div class="data-group">
+                        <span class="label" style="color: #94a3b8; font-size: 13px;">اسم الحساب:</span>
+                        <div
+                            style="background: rgba(0,0,0,0.4); padding: 10px; border-radius: 6px; margin-top: 5px; color: white; font-weight: bold;">
+                            Hard State Roleplay
+                        </div>
+                    </div>
+
+                    <!-- Official Postal Card -->
+                    <div class="official-card"
+                        style="margin-top: 20px; background: #e2e8f0; border-radius: 8px; padding: 15px; color: #1e293b; position: relative; overflow: hidden;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fbbf24; padding-bottom: 10px; margin-bottom: 15px;">
+                            <span style="font-weight: 900; font-size: 16px; color: #1e3a8a;">Algérie Poste</span>
+                            <i class="fa-solid fa-building-columns" style="color: #fbbf24; font-size: 24px;"></i>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; font-size: 13px;">
+                            <div style="font-weight: bold; color: #64748b;">رقم الحساب الجاري:</div>
+                            <div style="font-family: monospace; font-size: 15px; font-weight: bold;">
+                                00799999000047187020</div>
+
+                            <div style="font-weight: bold; color: #64748b;">المفتاح (Key):</div>
+                            <div style="font-family: monospace; font-size: 15px; font-weight: bold;">00</div>
+
+                            <div style="font-weight: bold; color: #64748b;">اسم المستفيد:</div>
+                            <div style="font-weight: bold; text-transform: uppercase;">HARD STATE ROLEPLAY</div>
+                        </div>
+
+                        <div
+                            style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 11px; text-align: center; color: #64748b;">
+                            وثيقة بيانات رسمية للتحويل الإلكتروني
+                        </div>
+                    </div>
+                </div>
+
+                <div class="instructions-steps">
+                    <h4 style="color: white; margin: 15px 0 10px; font-size: 14px; text-align: right;">خطوات تفعيل
+                        الشراء:</h4>
+                    <div class="steps-grid"
+                        style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; text-align: center; direction: rtl;">
+
+                        <!-- Step 1 -->
+                        <div class="step-card"
+                            style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden;">
+                            <div
+                                style="position: absolute; top: -5px; right: -5px; width: 25px; height: 25px; background: var(--accent-cyan); color: #020c1b; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; z-index: 2;">
+                                1</div>
+                            <div
+                                style="background: rgba(251, 191, 36, 0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                                <i class="fa-solid fa-mobile-screen" style="color: #fbbf24; font-size: 18px;"></i>
+                            </div>
+                            <p style="font-size: 12px; color: white; font-weight: bold; margin: 0;">حول المبلغ</p>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="step-card"
+                            style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden;">
+                            <div
+                                style="position: absolute; top: -5px; right: -5px; width: 25px; height: 25px; background: var(--accent-cyan); color: #020c1b; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; z-index: 2;">
+                                2</div>
+                            <div
+                                style="background: rgba(251, 191, 36, 0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                                <i class="fa-solid fa-camera" style="color: #fbbf24; font-size: 18px;"></i>
+                            </div>
+                            <p style="font-size: 12px; color: white; font-weight: bold; margin: 0;">صور الوصل</p>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="step-card"
+                            style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden;">
+                            <div
+                                style="position: absolute; top: -5px; right: -5px; width: 25px; height: 25px; background: var(--accent-cyan); color: #020c1b; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; z-index: 2;">
+                                3</div>
+                            <div
+                                style="background: rgba(88, 101, 242, 0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                                <i class="fa-brands fa-discord" style="color: #5865F2; font-size: 18px;"></i>
+                            </div>
+                            <p style="font-size: 12px; color: white; font-weight: bold; margin: 0;">افتح تذكرة</p>
+                        </div>
+
+                    </div>
+                </div>
+                <a href="https://discord.gg/yF9DkY7NuW" target="_blank" class="btn btn-discord-full"><i
+                        class="fa-brands fa-discord"></i> فتح تذكرة واستلام المنتج</a>
+            </div>
+
+            <!-- Visa Details -->
+            <div id="visaDetails" class="payment-details" style="display: none;">
+                <p class="info-text">الدفع بالبطاقة (Visa/MasterCard)</p>
+                <form class="visa-form"
+                    onsubmit="event.preventDefault(); alert('نظام الدفع بالبطاقة قيد الصيانة. يرجى استخدام بريدي موب.');">
+                    <input type="text" placeholder="رقم البطاقة" class="input-field">
+                    <div class="input-row">
+                        <input type="text" placeholder="MM/YY" class="input-field">
+                        <input type="text" placeholder="CVC" class="input-field">
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">دفع الآن</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Add Product Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAdminModal()">&times;</span>
+            <h2 class="modal-title">إضافة منتج جديد</h2>
+            <form onsubmit="event.preventDefault(); addNewProduct();">
+                <input type="text" id="newProdName" placeholder="اسم المنتج" class="input-field block-input" required>
+                <input type="number" id="newProdPrice" placeholder="السعر (DA)" class="input-field block-input"
+                    required>
+                <input type="text" id="newProdImg" placeholder="رابط الصورة (URL)" class="input-field block-input"
+                    required>
+                <select id="newProdCat" class="input-field block-input">
+                    <option value="cars">سيارات</option>
+                    <option value="real-estate">عقارات</option>
+                    <option value="services">خدمات الشخصية</option>
+                </select>
+                <button type="submit" class="btn btn-primary full-width">إضافة للمتجر</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-cont">
+            <p>جميع الحقوق محفوظة &copy; 2026 <strong>Hard State Role Play</strong>.</p>
+        </div>
+    </footer>
+
+    <script src="js/security.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
